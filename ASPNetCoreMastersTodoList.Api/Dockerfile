@@ -10,16 +10,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["ASPNetCoreMasters.csproj", "."]
-RUN dotnet restore "./ASPNetCoreMasters.csproj"
+COPY ["ASPNetCoreMastersTodoList.Api.csproj", "."]
+RUN dotnet restore "./ASPNetCoreMastersTodoList.Api.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "ASPNetCoreMasters.csproj" -c Release -o /app/build
+RUN dotnet build "ASPNetCoreMastersTodoList.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ASPNetCoreMasters.csproj" -c Release -o /app/publish
+RUN dotnet publish "ASPNetCoreMastersTodoList.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ASPNetCoreMasters.dll"]
+ENTRYPOINT ["dotnet", "ASPNetCoreMastersTodoList.Api.dll"]
