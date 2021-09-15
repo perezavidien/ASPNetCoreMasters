@@ -8,9 +8,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
     public class ErrorController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        [Route("/error")]
+        public IActionResult Error() => Problem();
     }
 }
