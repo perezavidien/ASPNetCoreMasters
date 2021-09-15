@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Services.DTO;
+using System;
 using System.Collections.Generic;
 
 namespace Services
@@ -13,6 +14,16 @@ namespace Services
         public IEnumerable<string> GetAll()
         {
             return Items;
+        }
+
+
+        public void Save(ItemDTO text) // todo
+        {
+            // ?
+        }
+        public void Save()
+        {
+            // ?
         }
     }
 }
