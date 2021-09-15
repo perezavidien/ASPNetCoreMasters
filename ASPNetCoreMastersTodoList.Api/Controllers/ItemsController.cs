@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,25 +11,20 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
     public class ItemsController : Controller
     {
-        private static readonly string[] Items = new[]
-        {
-            "One", "Two", "Three"
-        };
-
         private readonly ILogger<ItemsController> _logger;
+        private ItemService _itemService;
 
-        public ItemsController(ILogger<ItemsController> logger)
+        public ItemsController(ILogger<ItemsController> logger, ItemService itemService)
         {
             _logger = logger;
+            _itemService = itemService;
         }
 
 
         [HttpGet]
         IEnumerable<string> GetAll(int userId)
         {
-            // ?
-
-            return Items;
+            return _itemService.GetAll();
         }
     }
 }
