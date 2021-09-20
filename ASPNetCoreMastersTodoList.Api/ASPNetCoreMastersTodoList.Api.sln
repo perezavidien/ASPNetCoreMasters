@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASPNetCoreMastersTodoList.Api", "ASPNetCoreMastersTodoList.Api.csproj", "{66B3BE9D-C29D-4B53-A601-E45D266C7CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "..\Services\Services.csproj", "{D809395E-5E6F-4FB7-8075-BADFCB024545}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66B3BE9D-C29D-4B53-A601-E45D266C7CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66B3BE9D-C29D-4B53-A601-E45D266C7CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66B3BE9D-C29D-4B53-A601-E45D266C7CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66B3BE9D-C29D-4B53-A601-E45D266C7CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D809395E-5E6F-4FB7-8075-BADFCB024545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D809395E-5E6F-4FB7-8075-BADFCB024545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D809395E-5E6F-4FB7-8075-BADFCB024545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D809395E-5E6F-4FB7-8075-BADFCB024545}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C29BD69-0335-4C4C-A9B5-1BF5F225C714}
+	EndGlobalSection
+EndGlobal
