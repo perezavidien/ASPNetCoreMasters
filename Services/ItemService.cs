@@ -11,19 +11,18 @@ namespace Services
             "One", "Two", "Three"
         };
 
-        public IEnumerable<string> GetAll()
+        public IEnumerable<string> GetAll(int userId)
         {
+            // no requirements on what to do on the userId
             return Items;
         }
 
 
-        public void Save(ItemDTO text) // todo
+        public void Save(ItemDTO itemObject)
         {
-            // ?
-        }
-        public void Save()
-        {
-            // ?
+            Console.Write(itemObject);
+
+            // do something to itemObject
         }
     }
 }

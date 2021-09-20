@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [HttpGet]
         IEnumerable<string> GetAll(int userId)
         {
-            return _itemService.GetAll();
+            return _itemService.GetAll(userId);
         }
 
         [HttpGet]
@@ -34,13 +35,16 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             return 1;
         }
 
-        void Save(ItemCreateBindingModel text)
+        [HttpPost]
+        void Save(ItemCreateBindingModel modelObject)
         {
             // accepts ItemCreateBindingModel object
             // ? and is mapped to an ItemDTO object
             // for the ItemService Save method to consume
+            
+            var itemObject = new ItemDTO(modelObject.Text);            
 
-            _itemService.Save(); // todo
+            _itemService.Save(itemObject);
         }
     }
 }
