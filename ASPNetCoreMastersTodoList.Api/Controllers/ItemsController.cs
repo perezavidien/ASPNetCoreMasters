@@ -22,7 +22,6 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             _itemService = itemService;
         }
 
-
         [HttpGet]
         IEnumerable<string> GetAll(int userId)
         {
@@ -36,15 +35,15 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         }
 
         [HttpPost]
-        void Save(ItemCreateBindingModel modelObject)
+        void Save([FromBody] ItemCreateBindingModel modelObject)
         {
             // accepts ItemCreateBindingModel object
             // ? and is mapped to an ItemDTO object
             // for the ItemService Save method to consume
             
-            var itemObject = new ItemDTO(modelObject.Text);            
+            var itemDto= new ItemDTO(modelObject.Text);            
 
-            _itemService.Save(itemObject);
+            _itemService.Save(itemDto);
         }
     }
 }

@@ -10,7 +10,10 @@ namespace Services.DTO
 
         public ItemDTO(string text)
         {
-            this.Text = text;
+            if (text == null)
+                return;
+
+            Text = text;
         }
 
     }

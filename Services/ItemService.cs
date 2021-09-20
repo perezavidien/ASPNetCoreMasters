@@ -1,4 +1,5 @@
-﻿using Services.DTO;
+﻿using DomainModels;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 
@@ -18,9 +19,10 @@ namespace Services
         }
 
 
-        public void Save(ItemDTO itemObject)
+        public void Save(ItemDTO itemDto)
         {
-            Console.Write(itemObject);
+            var item = new Item(itemDto.Text);
+            Console.Write(item);
 
             // do something to itemObject
         }
