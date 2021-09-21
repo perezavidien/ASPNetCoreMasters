@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DomainModels;
+using Services.DTO;
+using System;
 using System.Collections.Generic;
 
 namespace Services
@@ -10,9 +12,19 @@ namespace Services
             "One", "Two", "Three"
         };
 
-        public IEnumerable<string> GetAll()
+        public IEnumerable<string> GetAll(int userId)
         {
+            // no requirements on what to do on the userId
             return Items;
+        }
+
+
+        public void Save(ItemDTO itemDto)
+        {
+            var item = new Item(itemDto.Text);
+            Console.Write(item);
+
+            // do something to itemObject
         }
     }
 }

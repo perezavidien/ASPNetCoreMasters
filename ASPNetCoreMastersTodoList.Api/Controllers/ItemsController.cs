@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ASPNetCoreMastersTodoList.Api.ApiModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +22,28 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             _itemService = itemService;
         }
 
-
         [HttpGet]
         IEnumerable<string> GetAll(int userId)
         {
-            return _itemService.GetAll();
+            return _itemService.GetAll(userId);
+        }
+
+        [HttpGet]
+        int Get(int userId)
+        {
+            return 1;
+        }
+
+        [HttpPost]
+        void Save([FromBody] ItemCreateBindingModel modelObject)
+        {
+            // accepts ItemCreateBindingModel object
+            // ? and is mapped to an ItemDTO object
+            // for the ItemService Save method to consume
+            
+            var itemDto= new ItemDTO(modelObject.Text);            
+
+            _itemService.Save(itemDto);
         }
     }
 }
