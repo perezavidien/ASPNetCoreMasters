@@ -39,6 +39,9 @@ namespace ASPNetCoreMastersTodoList.Api
                 app.UseExceptionHandler("/error");
             }
 
+            
+            //ItemService
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -47,8 +50,9 @@ namespace ASPNetCoreMastersTodoList.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default", pattern: "{controller}/{action}/{id?}");
+                endpoints.MapControllers();
+                //endpoints.MapControllerRoute(
+                //    name: "default", pattern: "{controller}/{action}/{id?}");
             });
         }
     }

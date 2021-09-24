@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
+    [ApiController]
+    [Route("items")]
     public class ItemsController : Controller
     {
         private readonly ILogger<ItemsController> _logger;
@@ -23,27 +25,58 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         }
 
         [HttpGet]
-        IEnumerable<string> GetAll(int userId)
+        IActionResult Get()
         {
-            return _itemService.GetAll(userId);
+            var result = _itemService.GetAll();
+            return Ok(result);
         }
 
         [HttpGet]
-        int Get(int userId)
+        [Route("{itemId}")]
+        IActionResult Get(int userId)
         {
-            return 1;
+            var result = _itemService.GetById(userId);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("filterBy?[text]=[text]")]
+        IActionResult GetByFilters([FromBody] Dictionary<string, string> filters)
+        {
+            var result = _itemService.GetByFilters(filters);
+            return Ok(result);
         }
 
         [HttpPost]
-        void Save([FromBody] ItemCreateBindingModel modelObject)
+        IActionResult Post([FromBody] ItemCreateBindingModel itemCreateModel)
         {
             // accepts ItemCreateBindingModel object
             // ? and is mapped to an ItemDTO object
             // for the ItemService Save method to consume
             
-            var itemDto= new ItemDTO(modelObject.Text);            
+            var itemDto = new ItemDTO(itemCreateModel.Text);            
 
             _itemService.Save(itemDto);
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("{itemId}")]
+        IActionResult Put(int id, [FromBody] ItemUpdateBindingModel itemUpdateModel)
+        {
+            var itemDto = new ItemDTO(itemUpdateModel.Text);
+
+            _itemService.Update(id, itemDto);
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("{itemId}")]
+        IActionResult Delete(int itemId)
+        {
+            _itemService.Delete(itemId);
+            return Ok();
         }
     }
 }
