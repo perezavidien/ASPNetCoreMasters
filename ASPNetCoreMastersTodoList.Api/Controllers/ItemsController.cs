@@ -16,6 +16,9 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     public class ItemsController : Controller
     {
         private readonly ILogger<ItemsController> _logger;
+
+        //todo
+        //ItemsController should use the interface IItemService to perform the intention of the action methods.  
         private ItemService _itemService;
 
         public ItemsController(ILogger<ItemsController> logger, ItemService itemService)
@@ -35,15 +38,16 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("{itemId}")]
         IActionResult Get(int userId)
         {
-            var result = _itemService.GetById(userId);
+            var result = _itemService.Get(userId);
             return Ok(result);
         }
 
         [HttpGet]
         [Route("filterBy?[text]=[text]")]
-        IActionResult GetByFilters([FromBody] Dictionary<string, string> filters)
+        IActionResult GetByFilters([FromBody] string filters)
         {
-            var result = _itemService.GetByFilters(filters);
+            var itemDto = new ItemDTO(filters);
+            var result = _itemService.GetAllByFilter(itemDto);
             return Ok(result);
         }
 
@@ -56,7 +60,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             
             var itemDto = new ItemDTO(itemCreateModel.Text);            
 
-            _itemService.Save(itemDto);
+            _itemService.Add(itemDto);
 
             return Ok();
         }
@@ -67,7 +71,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         {
             var itemDto = new ItemDTO(itemUpdateModel.Text);
 
-            _itemService.Update(id, itemDto);
+            _itemService.Update(itemDto);
             return Ok();
         }
 

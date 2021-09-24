@@ -39,8 +39,10 @@ namespace ASPNetCoreMastersTodoList.Api
                 app.UseExceptionHandler("/error");
             }
 
-            
-            //ItemService
+            //Should have ItemService
+            //Should have ItemRepository
+            //Should have DataContext
+
 
             app.UseHttpsRedirection();
 

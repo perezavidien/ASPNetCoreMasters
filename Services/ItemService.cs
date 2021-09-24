@@ -5,54 +5,46 @@ using System.Collections.Generic;
 
 namespace Services
 {
-    public class ItemService
+    public class ItemService: IItemService
     {
-        //todo return list of <str, str> objects
-        private static readonly string[] Items = new[]
+        //todo
+        //ItemService should use IItemRepository appropriately.
+        private IItemService _service;
+        
+        public IEnumerable<ItemDTO> GetAll()
         {
-            "One", "Two", "Three"
-        };
-
-        public IEnumerable<string> GetAll()
-        {
-            return Items;
+            return _service.GetAll();
         }
-        public IEnumerable<string> GetById(int userId)
+        public ItemDTO Get(int itemId)
         {
-            //todo
-            return Items;
+            return _service.Get(itemId);
         }
-        public IEnumerable<string> GetByFilters(Dictionary<string, string> filters)
+        public IEnumerable<ItemDTO> GetAllByFilter(ItemByFilterDTO filters)
         {
-            //todo
-            return Items;
+            return _service.GetAllByFilter(filters);
         }
         
-        //todo
-        public void Save(ItemDTO itemDto)
+        public void Add(ItemDTO itemDto)
         {
             var item = new Item(itemDto.Text);
             Console.Write("save " + item);
 
-            // do something to item
+            _service.Add(itemDto);
         }
 
-        //todo
-        public void Update(int id, ItemDTO itemDto)
+        public void Update(ItemDTO itemDto)
         {
             var item = new Item(itemDto.Text);
-            Console.Write("update " + id);
             Console.Write("update " + item);
 
-            // do something to item
+            _service.Update(itemDto);
         }
 
-        //todo
         public void Delete(int id)
         {
             Console.Write("delete " + id);
 
-            // do something to item
+            _service.Delete(id);
         }
     }
 }
