@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Services;
 using Repositories;
+using ASPNetCoreMastersTodoList.Api.Helpers;
 
 namespace ASPNetCoreMastersTodoList.Api
 {
@@ -24,6 +25,7 @@ namespace ASPNetCoreMastersTodoList.Api
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddSingleton<DataContext>();
+            services.Configure<Authentication>(Configuration.GetSection("Authentication"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
