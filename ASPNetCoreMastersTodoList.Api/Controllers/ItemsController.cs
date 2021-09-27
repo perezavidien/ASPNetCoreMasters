@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
     [ApiController]
-    [Route("items")]
+    [Route("[controller]")]
     public class ItemsController : Controller
     {
         private readonly ILogger<ItemsController> _logger;
@@ -33,14 +33,14 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         [HttpGet]
         [Route("{itemId}")]
-        IActionResult Get(int id)
+        IActionResult Get(int itemId)
         {
-            var result = _itemService.GetById(id);
+            var result = _itemService.GetById(itemId);
             return Ok(result);
         }
 
         [HttpGet]
-        [Route("filterBy?[text]=[text]")]
+        [Route("filterBy")]
         IActionResult GetByFilters([FromBody] Dictionary<string, string> filters)
         {
             var result = _itemService.GetByFilters(filters);
@@ -63,11 +63,11 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         [HttpPut]
         [Route("{itemId}")]
-        IActionResult Put(int id, [FromBody] ItemUpdateBindingModel itemUpdateModel)
+        IActionResult Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
         {
             var itemDto = new ItemDTO(itemUpdateModel.Text);
 
-            _itemService.Update(id, itemDto);
+            _itemService.Update(itemId, itemDto);
             return Ok();
         }
 
