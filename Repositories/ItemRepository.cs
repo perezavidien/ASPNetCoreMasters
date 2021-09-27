@@ -1,28 +1,61 @@
 ﻿using DomainModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Repositories
 {
-    class ItemRepository : IItemRepository
+    public class ItemRepository : IItemRepository
     {
-        //todo
-        //ItemRepository should use DataContext appropriately.
+        private DataContext _dataContext;
+        public ItemRepository(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
+
         public IQueryable<Item> All()
         {
-            throw new NotImplementedException();
+            return _dataContext.Items.AsQueryable<Item>();
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var record = _dataContext.Items.Find(_ => _.Id == id);
+
+            _dataContext.Items.Remove(record);
         }
 
         public void Save(Item item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (item == null)
+                    return;
+
+                if (item.Id == default)
+                {
+                    //create
+                    _dataContext.Items.Add(item);
+                }
+                else
+                {
+                    var record = _dataContext.Items.Find(_ => _.Id == item.Id);
+
+                    if (record == null)
+                    {
+                        //create
+                        _dataContext.Items.Add(item);
+                    }
+                    else
+                    {
+                        //update
+                        record.Text = item.Text;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

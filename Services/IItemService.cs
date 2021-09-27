@@ -1,11 +1,9 @@
 ﻿using Services.DTO;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Services
 {
-    interface IItemService
+    public interface IItemService
     {
         IEnumerable<ItemDTO> GetAll();
         IEnumerable<ItemDTO> GetAllByFilter(ItemByFilterDTO filters);

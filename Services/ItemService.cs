@@ -1,50 +1,65 @@
 ﻿using DomainModels;
+using Repositories;
 using Services.DTO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Services
 {
-    public class ItemService: IItemService
+    public class ItemService : IItemService
     {
-        //todo
-        //ItemService should use IItemRepository appropriately.
-        private IItemService _service;
-        
+        private IItemRepository _repository;
+
+        public ItemService(IItemRepository repository)
+        {
+            _repository = repository;
+        }
+
         public IEnumerable<ItemDTO> GetAll()
         {
-            return _service.GetAll();
+            return _repository.All()
+                .Select(_ => new ItemDTO { Id = _.Id, Text = _.Text });
         }
         public ItemDTO Get(int itemId)
         {
-            return _service.Get(itemId);
+            var record = _repository.All().FirstOrDefault(_ => _.Id == itemId);
+            if (record == null)
+                return null;
+                //else
+                //{
+                //    throw;
+                //}
+
+            return new ItemDTO { Id = record.Id, Text = record.Text };
         }
         public IEnumerable<ItemDTO> GetAllByFilter(ItemByFilterDTO filters)
         {
-            return _service.GetAllByFilter(filters);
+            return _repository.All().Where(_ => _.Text == filters.Text)
+                .Select(_ => new ItemDTO { Id = _.Id, Text = _.Text });
         }
-        
+
         public void Add(ItemDTO itemDto)
         {
-            var item = new Item(itemDto.Text);
-            Console.Write("save " + item);
-
-            _service.Add(itemDto);
+            var record = new Item(itemDto.Text);
+            _repository.Save(record);
         }
 
         public void Update(ItemDTO itemDto)
         {
-            var item = new Item(itemDto.Text);
-            Console.Write("update " + item);
+            var record = _repository.All().FirstOrDefault(_ => _.Id == itemDto.Id);
+            if (record != null)
+                _repository.Save(record);
 
-            _service.Update(itemDto);
+            //else
+            //{
+            //    throw;
+            //}
         }
 
         public void Delete(int id)
         {
-            Console.Write("delete " + id);
-
-            _service.Delete(id);
+            _repository.Delete(id);
         }
     }
 }
