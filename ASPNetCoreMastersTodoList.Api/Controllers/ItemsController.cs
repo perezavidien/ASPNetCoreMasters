@@ -21,10 +21,9 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         //ItemsController should use the interface IItemService to perform the intention of the action methods.  
         private ItemService _itemService;
 
-        public ItemsController(ILogger<ItemsController> logger, ItemService itemService)
+        public ItemsController(ILogger<ItemsController> logger)
         {
             _logger = logger;
-            _itemService = itemService;
         }
 
         [HttpGet]
@@ -36,9 +35,9 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         [HttpGet]
         [Route("{itemId}")]
-        IActionResult Get(int userId)
+        IActionResult Get(int id)
         {
-            var result = _itemService.Get(userId);
+            var result = _itemService.GetById(id);
             return Ok(result);
         }
 
