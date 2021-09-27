@@ -18,10 +18,10 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         private readonly ILogger<ItemsController> _logger;
         private ItemService _itemService;
 
-        public ItemsController(ILogger<ItemsController> logger, ItemService itemService)
+        public ItemsController(ILogger<ItemsController> logger)
         {
+            _itemService = new ItemService();
             _logger = logger;
-            _itemService = itemService;
         }
 
         [HttpGet]
@@ -33,9 +33,9 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         [HttpGet]
         [Route("{itemId}")]
-        IActionResult Get(int userId)
+        IActionResult Get(int id)
         {
-            var result = _itemService.GetById(userId);
+            var result = _itemService.GetById(id);
             return Ok(result);
         }
 
