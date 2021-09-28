@@ -12,6 +12,14 @@ namespace DomainModels
 
             this.Text = text;
         }
+        public Item(int id, string text)
+        {
+            if (text == null)
+                return;
+
+            this.Text = text;
+            this.Id = id;
+        }
 
         public int Id { get; set; }
         public string Text { get; set; }
