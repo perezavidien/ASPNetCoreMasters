@@ -8,13 +8,5 @@ namespace Services.DTO
     {
         public string Text { get; set; }
         public int Id { get; set; }
-
-        public ItemByFilterDTO(string text)
-        {
-            if (text == null)
-                return;
-
-            Text = text;
-        }
     }
 }

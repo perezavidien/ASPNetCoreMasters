@@ -44,9 +44,16 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         [HttpGet]
         [Route("filterBy")]
-        IActionResult GetByFilters([FromBody] string filters)
+        IActionResult GetByFilters([FromBody] Dictionary<string, string> filters)
         {
-            var itemFilterDto = new ItemByFilterDTO(filters);
+            var id = int.Parse(filters.GetValueOrDefault("id"));
+            var text = filters.GetValueOrDefault("text");
+
+            var itemFilterDto = new ItemByFilterDTO()
+            {
+                Id = id,
+                Text = text
+            };
 
             var result = _itemService.GetAllByFilter(itemFilterDto);
 
@@ -67,11 +74,9 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("{itemId}")]
         IActionResult Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
         {
-            //where to use itemId?
-
             var itemDto = new ItemDTO()
             {
-                Id = itemUpdateModel.Id,
+                Id = itemId,
                 Text = itemUpdateModel.Text
             };
 
