@@ -21,5 +21,7 @@ namespace ASPNetCoreMastersTodoList.Api.ApiModels
         [Required]
         [StringLength(128, MinimumLength = 1)]
         public string Text { get; set; }
+
+        public int Id { get; set; }
     }
 }

@@ -1,58 +1,65 @@
 ﻿using DomainModels;
+using Repositories;
 using Services.DTO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Services
 {
-    public class ItemService
+    public class ItemService : IItemService
     {
-        //todo return list of <str, str> objects
-        private static readonly string[] Items = new[]
-        {
-            "One", "Two", "Three"
-        };
+        private IItemRepository _repository;
 
-        public IEnumerable<string> GetAll()
+        public ItemService(IItemRepository repository)
         {
-            return Items;
-        }
-        public IEnumerable<string> GetById(int userId)
-        {
-            //todo
-            return Items;
-        }
-        public IEnumerable<string> GetByFilters(Dictionary<string, string> filters)
-        {
-            //todo
-            return Items;
-        }
-        
-        //todo
-        public void Save(ItemDTO itemDto)
-        {
-            var item = new Item(itemDto.Text);
-            Console.Write("save " + item);
-
-            // do something to item
+            _repository = repository;
         }
 
-        //todo
-        public void Update(int id, ItemDTO itemDto)
+        public IEnumerable<ItemDTO> GetAll()
         {
-            var item = new Item(itemDto.Text);
-            Console.Write("update " + id);
-            Console.Write("update " + item);
+            return _repository.All()
+                .Select(_ => new ItemDTO { Id = _.Id, Text = _.Text });
+        }
+        public ItemDTO Get(int itemId)
+        {
+            var record = _repository.All().FirstOrDefault(_ => _.Id == itemId);
+            if (record == null)
+                return null;
+                //else
+                //{
+                //    throw;
+                //}
 
-            // do something to item
+            return new ItemDTO { Id = record.Id, Text = record.Text };
+        }
+        public IEnumerable<ItemDTO> GetAllByFilter(ItemByFilterDTO filters)
+        {
+            return _repository.All().Where(_ => _.Text == filters.Text)
+                .Select(_ => new ItemDTO { Id = _.Id, Text = _.Text });
         }
 
-        //todo
+        public void Add(ItemDTO itemDto)
+        {
+            var record = new Item(itemDto.Text);
+            _repository.Save(record);
+        }
+
+        public void Update(ItemDTO itemDto)
+        {
+            var record = _repository.All().FirstOrDefault(_ => _.Id == itemDto.Id);
+            if (record != null)
+                _repository.Save(record);
+
+            //else
+            //{
+            //    throw;
+            //}
+        }
+
         public void Delete(int id)
         {
-            Console.Write("delete " + id);
-
-            // do something to item
+            _repository.Delete(id);
         }
     }
 }

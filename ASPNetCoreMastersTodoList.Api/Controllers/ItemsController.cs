@@ -16,18 +16,20 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     public class ItemsController : Controller
     {
         private readonly ILogger<ItemsController> _logger;
-        private ItemService _itemService;
 
-        public ItemsController(ILogger<ItemsController> logger)
+        private IItemService _itemService;
+
+        public ItemsController(ILogger<ItemsController> logger, IItemService itemService)
         {
-            _itemService = new ItemService();
             _logger = logger;
+            _itemService = itemService;
         }
 
         [HttpGet]
         IActionResult Get()
         {
             var result = _itemService.GetAll();
+
             return Ok(result);
         }
 
@@ -35,7 +37,8 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("{itemId}")]
         IActionResult Get(int itemId)
         {
-            var result = _itemService.GetById(itemId);
+            var result = _itemService.Get(itemId);
+
             return Ok(result);
         }
 
@@ -43,20 +46,26 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("filterBy")]
         IActionResult GetByFilters([FromBody] Dictionary<string, string> filters)
         {
-            var result = _itemService.GetByFilters(filters);
+            var id = int.Parse(filters.GetValueOrDefault("id"));
+            var text = filters.GetValueOrDefault("text");
+
+            var itemFilterDto = new ItemByFilterDTO()
+            {
+                Id = id,
+                Text = text
+            };
+
+            var result = _itemService.GetAllByFilter(itemFilterDto);
+
             return Ok(result);
         }
 
         [HttpPost]
         IActionResult Post([FromBody] ItemCreateBindingModel itemCreateModel)
         {
-            // accepts ItemCreateBindingModel object
-            // ? and is mapped to an ItemDTO object
-            // for the ItemService Save method to consume
-            
-            var itemDto = new ItemDTO(itemCreateModel.Text);            
+            var itemDto = new ItemDTO() { Text = itemCreateModel.Text };
 
-            _itemService.Save(itemDto);
+            _itemService.Add(itemDto);
 
             return Ok();
         }
@@ -65,9 +74,14 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("{itemId}")]
         IActionResult Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
         {
-            var itemDto = new ItemDTO(itemUpdateModel.Text);
+            var itemDto = new ItemDTO()
+            {
+                Id = itemId,
+                Text = itemUpdateModel.Text
+            };
 
-            _itemService.Update(itemId, itemDto);
+            _itemService.Update(itemDto);
+
             return Ok();
         }
 
@@ -76,6 +90,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         IActionResult Delete(int itemId)
         {
             _itemService.Delete(itemId);
+
             return Ok();
         }
     }

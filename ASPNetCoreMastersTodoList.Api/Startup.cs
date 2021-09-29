@@ -1,15 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Services;
+using Repositories;
 
 namespace ASPNetCoreMastersTodoList.Api
 {
@@ -26,6 +21,9 @@ namespace ASPNetCoreMastersTodoList.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IItemService, ItemService>();
+            services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddSingleton<DataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,9 +36,6 @@ namespace ASPNetCoreMastersTodoList.Api
             {
                 app.UseExceptionHandler("/error");
             }
-
-            
-            //ItemService
 
             app.UseHttpsRedirection();
 

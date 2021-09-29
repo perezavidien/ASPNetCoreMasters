@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASPNetCoreMastersTodoList.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "..\Services\Services.csproj", "{D809395E-5E6F-4FB7-8075-BADFCB024545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModels", "..\DomainModels\DomainModels.csproj", "{21B701CA-B3FA-40A7-8F2C-3EE9007501E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainModels", "..\DomainModels\DomainModels.csproj", "{21B701CA-B3FA-40A7-8F2C-3EE9007501E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "..\Repositories\Repositories.csproj", "{9DC1E5D1-E43A-4E70-86E3-B280D45C6706}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{21B701CA-B3FA-40A7-8F2C-3EE9007501E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21B701CA-B3FA-40A7-8F2C-3EE9007501E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21B701CA-B3FA-40A7-8F2C-3EE9007501E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DC1E5D1-E43A-4E70-86E3-B280D45C6706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DC1E5D1-E43A-4E70-86E3-B280D45C6706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DC1E5D1-E43A-4E70-86E3-B280D45C6706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DC1E5D1-E43A-4E70-86E3-B280D45C6706}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
