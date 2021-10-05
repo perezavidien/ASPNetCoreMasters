@@ -49,11 +49,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             var id = int.Parse(filters.GetValueOrDefault("id"));
             var text = filters.GetValueOrDefault("text");
 
-            var itemFilterDto = new ItemByFilterDTO()
-            {
-                Id = id,
-                Text = text
-            };
+            var itemFilterDto = new ItemByFilterDTO(id, text);
 
             var result = _itemService.GetAllByFilter(itemFilterDto);
 
@@ -63,7 +59,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [HttpPost]
         IActionResult Post([FromBody] ItemCreateBindingModel itemCreateModel)
         {
-            var itemDto = new ItemDTO() { Text = itemCreateModel.Text };
+            var itemDto = new ItemDTO(itemCreateModel.Text);
 
             _itemService.Add(itemDto);
 
@@ -74,11 +70,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("{itemId}")]
         IActionResult Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
         {
-            var itemDto = new ItemDTO()
-            {
-                Id = itemId,
-                Text = itemUpdateModel.Text
-            };
+            var itemDto = new ItemDTO(itemId, itemUpdateModel.Text);
 
             _itemService.Update(itemDto);
 

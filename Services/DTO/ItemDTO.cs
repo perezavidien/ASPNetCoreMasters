@@ -9,13 +9,22 @@ namespace Services.DTO
         public string Text { get; set; }
         public int Id { get; set; }
 
-        //public ItemDTO(string text)
-        //{
-        //    if (text == null)
-        //        return;
+        public ItemDTO()
+        { }
 
-        //    Text = text;
-        //}
+        public ItemDTO(string text)
+        {
+            if (!String.IsNullOrEmpty(text))
+                Text = text;
+        }
+        public ItemDTO(int id, string text)
+        {
+            if (id != default)
+                Id = id;
+
+            if (!String.IsNullOrEmpty(text))
+                Text = text;
+        }
 
     }
 }
