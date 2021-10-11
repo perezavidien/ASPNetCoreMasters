@@ -61,5 +61,10 @@ namespace Services
         {
             _repository.Delete(id);
         }
+
+        public bool ItemExists(int id)
+        {
+            return _repository.All().Any(_ => _.Id == id);
+        }
     }
 }

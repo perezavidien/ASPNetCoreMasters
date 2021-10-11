@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ASPNetCoreMastersTodoList.Api.Filters
 {
-    public class ItemExistsFilter : IActionFilter
+    public class ItemExistsFilter: IActionFilter
     {
         private IItemService _itemService;
 
@@ -22,13 +22,23 @@ namespace ASPNetCoreMastersTodoList.Api.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            // call svc
+            context.ActionArguments.TryGetValue("itemId", out object itemId);
+
+            if (itemId != null)
+            {
+                var id = (int)itemId;
+
+                if (!_itemService.ItemExists(id))
+                {
+                    context.Result = new NotFoundResult();
+                }
+            }
         }
     }
 
-    public class ItemExistAttribute : TypeFilterAttribute
+    public class ItemExistsAttribute : TypeFilterAttribute
     {
-        public ItemExistAttribute() : base(typeof(ItemExistsFilter))
+        public ItemExistsAttribute() : base(typeof(ItemExistsFilter))
         { }
     }
 
