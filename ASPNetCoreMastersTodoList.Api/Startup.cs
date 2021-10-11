@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Services;
 using Repositories;
 using ASPNetCoreMastersTodoList.Api.Helpers;
+using ASPNetCoreMastersTodoList.Api.Filters;
 
 namespace ASPNetCoreMastersTodoList.Api
 {
@@ -21,7 +22,10 @@ namespace ASPNetCoreMastersTodoList.Api
         // This method gets called by the runtime. Use this method to add services to the containermap.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new PerformanceFilter());
+            });
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddSingleton<DataContext>();
