@@ -11,6 +11,6 @@ namespace Services
         void Add(ItemDTO itemDto);
         void Update(ItemDTO itemDTO);
         void Delete(int id);
-
+        bool ItemExists(int id);
     }
 }
