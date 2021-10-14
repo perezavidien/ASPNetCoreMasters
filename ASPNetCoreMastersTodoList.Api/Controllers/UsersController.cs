@@ -30,5 +30,20 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
             return Ok(new { token = tokenString });
         }
+
+        [HttpPost]
+        public IActionResult Register()
+        {
+            // todo
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmEmail()
+        {
+            // todo
+            return Ok();
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ASPNetCoreMastersTodoList.Api.ApiModels;
 using ASPNetCoreMastersTodoList.Api.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     [ApiController]
     [Route("[controller]")]
     [ItemExists]
+    [Authorize]
     public class ItemsController : Controller
     {
         private readonly ILogger<ItemsController> _logger;
