@@ -9,12 +9,13 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using ASPNetCoreMastersTodoList.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using ASPNetCoreMastersTodoList.Api.Data;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
     public class UsersController : Controller
     {
-
+        private readonly UserDBContext _dbContext;
         private IConfiguration _config;
         //private IAuthorizationService _authService;
         private IOptions<Authentication> _authSettings;
@@ -22,10 +23,12 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         public UsersController(
             IConfiguration config, 
             IAuthorizationService _authService, 
-            IOptions<Authentication> authSettings)
+            IOptions<Authentication> authSettings,
+            UserDBContext dbContext)
         {
             _config = config;
             _authSettings = authSettings;
+            _dbContext = dbContext;
         }
 
         [HttpPost]

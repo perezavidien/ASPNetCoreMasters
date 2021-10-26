@@ -1,4 +1,5 @@
 ﻿using ASPNetCoreMastersTodoList.Api.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace ASPNetCoreMastersTodoList.Api.Data
 {
 
-    public class UserDBContext : DbContext
+    public class UserDBContext : IdentityDbContext
     {
         public UserDBContext(DbContextOptions options) : base(options)
         {

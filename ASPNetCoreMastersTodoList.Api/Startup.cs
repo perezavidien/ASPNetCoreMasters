@@ -30,6 +30,10 @@ namespace ASPNetCoreMastersTodoList.Api
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<UserDBContext>()
+                .AddDefaultTokenProviders();
+
             services.AddControllers(options =>
             {
                 options.Filters.Add(new PerformanceFilter());
