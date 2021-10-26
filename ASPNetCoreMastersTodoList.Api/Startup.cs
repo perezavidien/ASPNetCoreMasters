@@ -7,6 +7,8 @@ using Services;
 using Repositories;
 using ASPNetCoreMastersTodoList.Api.Helpers;
 using ASPNetCoreMastersTodoList.Api.Filters;
+using ASPNetCoreMastersTodoList.Api.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASPNetCoreMastersTodoList.Api
 {
@@ -22,6 +24,11 @@ namespace ASPNetCoreMastersTodoList.Api
         // This method gets called by the runtime. Use this method to add services to the containermap.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<CityDBContext>(options =>
+            {
+               options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            });
+
             services.AddControllers(options =>
             {
                 options.Filters.Add(new PerformanceFilter());
