@@ -16,7 +16,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     {
 
         private IConfiguration _config;
-        private IAuthorizationService _authService;
+        //private IAuthorizationService _authService;
         private IOptions<Authentication> _authSettings;
 
         public UsersController(

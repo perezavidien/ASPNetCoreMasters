@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 
 namespace ASPNetCoreMastersTodoList.Api.Data.Models
 {
-    public class City
+    public class User
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        public bool EmailConfirmed { get; set; }
     }
 }
