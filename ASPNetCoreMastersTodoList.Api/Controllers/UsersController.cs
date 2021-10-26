@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System.Text;
 using Microsoft.Extensions.Options;
 using ASPNetCoreMastersTodoList.Api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
@@ -15,15 +16,20 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     {
 
         private IConfiguration _config;
-        public IOptions<Authentication> _authSettings;
+        private IAuthorizationService _authService;
+        private IOptions<Authentication> _authSettings;
 
-        public UsersController(IConfiguration config, IOptions<Authentication> authSettings)
+        public UsersController(
+            IConfiguration config, 
+            IAuthorizationService _authService, 
+            IOptions<Authentication> authSettings)
         {
             _config = config;
             _authSettings = authSettings;
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Login()
         {
             var tokenString = Encoding.ASCII.GetBytes(_authSettings.Value.Jwt.SecurityKey);
@@ -32,6 +38,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Register()
         {
             // todo
@@ -39,6 +46,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult ConfirmEmail()
         {
             // todo
