@@ -1,4 +1,5 @@
 ﻿using ASPNetCoreMastersTodoList.Api.ApiModels;
+using ASPNetCoreMastersTodoList.Api.Data;
 using ASPNetCoreMastersTodoList.Api.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,10 +24,13 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         private IItemService _itemService;
 
-        public ItemsController(ILogger<ItemsController> logger, IItemService itemService)
+        private DotNetMastersDB _dbContext;
+
+        public ItemsController(ILogger<ItemsController> logger, IItemService itemService, DotNetMastersDB dbContext )
         {
             _logger = logger;
             _itemService = itemService;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -34,7 +38,9 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         {
             var result = _itemService.GetAll();
 
-            return Ok(result);
+            //return Ok(result);
+
+            return Ok(_dbContext.Item.ToList());
         }
 
         [HttpGet]

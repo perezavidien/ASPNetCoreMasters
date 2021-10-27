@@ -10,25 +10,34 @@ using Microsoft.Extensions.Options;
 using ASPNetCoreMastersTodoList.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using ASPNetCoreMastersTodoList.Api.Data;
+using ASPNetCoreMastersTodoList.Api.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
-    public class UsersController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class UsersController : ControllerBase
     {
         private readonly DotNetMastersDB _dbContext;
         private IConfiguration _config;
         //private IAuthorizationService _authService;
         private IOptions<Authentication> _authSettings;
+        private UserManager<IdentityUser> _userManager;
 
         public UsersController(
-            IConfiguration config, 
-            IAuthorizationService _authService, 
+            IConfiguration config,
+            IAuthorizationService _authService,
             IOptions<Authentication> authSettings,
-            DotNetMastersDB dbContext)
+            DotNetMastersDB dbContext,
+            UserManager<IdentityUser> userManager)
         {
             _config = config;
             _authSettings = authSettings;
             _dbContext = dbContext;
+            _userManager = userManager;
+
         }
 
         [HttpPost]
@@ -42,10 +51,33 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Register()
+        public async Task<IActionResult> Register(RegisterBindingModel model)
         {
-            // todo
-            return Ok();
+            var user = new IdentityUser
+            {
+                Email = model.Email,
+                UserName = model.Email //remove "@..."
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var err in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, err.Description);
+                }
+                return BadRequest(ModelState);
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            return Ok(new
+            {
+                token = token,
+                email = model.Email
+            });
         }
 
         [HttpPost]

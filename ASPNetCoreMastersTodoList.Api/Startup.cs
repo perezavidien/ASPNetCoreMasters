@@ -30,6 +30,10 @@ namespace ASPNetCoreMastersTodoList.Api
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<DotNetMastersDB>()
+                .AddDefaultTokenProviders();
+
             services.AddControllers(options =>
             {
                 options.Filters.Add(new PerformanceFilter());
@@ -46,7 +50,8 @@ namespace ASPNetCoreMastersTodoList.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            } else
+            }
+            else
             {
                 app.UseExceptionHandler("/error");
             }

@@ -1,4 +1,5 @@
 ﻿using ASPNetCoreMastersTodoList.Api.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ASPNetCoreMastersTodoList.Api.Data
 {
-    public class DotNetMastersDB : DbContext
+    public class DotNetMastersDB : IdentityDbContext
     {
         public DotNetMastersDB(DbContextOptions options) : base(options)
         {
         }
 
-        DbSet<Item> Item { get; set; }
+        public DbSet<Item> Item { get; set; }
     }
 }
