@@ -4,20 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ASPNetCoreMastersTodoList.Api.Data.Models
+namespace ASPNetCoreMastersTodoList.Api.BindingModels
 {
-    public class RegisterBindingModel
+    public class ConfirmBindingModel
     {
         [Required]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
-        public string Password { get; set; }
-
-        [Required]
-        [Compare("Password")]
-        public int ConfirmPassword { get; set; }
-
+        public string Token { get; set; }
     }
 }

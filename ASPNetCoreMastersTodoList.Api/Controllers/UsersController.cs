@@ -10,9 +10,12 @@ using Microsoft.Extensions.Options;
 using ASPNetCoreMastersTodoList.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using ASPNetCoreMastersTodoList.Api.Data;
-using ASPNetCoreMastersTodoList.Api.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using ASPNetCoreMastersTodoList.Api.BindingModels;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
@@ -22,36 +25,66 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     {
         private readonly DotNetMastersDB _dbContext;
         private IConfiguration _config;
-        //private IAuthorizationService _authService;
-        private IOptions<Authentication> _authSettings;
+        private JwtOptions _jwtOptions;
         private UserManager<IdentityUser> _userManager;
 
         public UsersController(
             IConfiguration config,
-            IAuthorizationService _authService,
-            IOptions<Authentication> authSettings,
+            IOptions<JwtOptions> JwtOptions,
             DotNetMastersDB dbContext,
             UserManager<IdentityUser> userManager)
         {
             _config = config;
-            _authSettings = authSettings;
+            _jwtOptions = JwtOptions.Value;
             _dbContext = dbContext;
             _userManager = userManager;
 
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         [Authorize]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(LoginBindingModel model)
         {
-            var tokenString = Encoding.ASCII.GetBytes(_authSettings.Value.Jwt.SecurityKey);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return NotFound(new { errors = new[] { $"User with email '{model.Email}' was not found." } });
+            }
 
-            return Ok(new { token = tokenString });
+            var confirmEmailResult = _userManager.CheckPasswordAsync(user, model.Password);
+            if (confirmEmailResult == null)
+            {
+                return BadRequest(new { errors = new[] { "Invalid Password." } });
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return BadRequest(new { errors = new[] { "Please confirm your email first." } });
+            }
+
+            var tokenString = GenerateToken(user);
+            return Ok(new { jwt = tokenString });
         }
 
-        [HttpPost]
+        private string GenerateToken(IdentityUser user)
+        {
+            IList<Claim> userClaims = new List<Claim>
+            {
+                new Claim("UserName", user.UserName),
+                new Claim("Email", user.Email)
+            };
+
+            return new JwtSecurityTokenHandler().WriteToken(
+                new JwtSecurityToken(
+                    claims: userClaims,
+                    expires: DateTime.Now.AddMinutes(10),
+                    signingCredentials: new SigningCredentials(_jwtOptions.SecurityKey, SecurityAlgorithms.HmacSha256)
+                    ));
+        }
+
+        [HttpPost("register")]
         [Authorize]
-        public async Task<IActionResult> Register(RegisterBindingModel model)
+        public async Task<IActionResult> RegisterAsync(RegisterBindingModel model)
         {
             var user = new IdentityUser
             {
@@ -80,13 +113,25 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             });
         }
 
-        [HttpPost]
+        [HttpPost("confirmEmail")]
         [Authorize]
-        public IActionResult ConfirmEmail()
+        public async Task<IActionResult> ConfirmEmailAsync(ConfirmBindingModel model)
         {
-            // todo
-            return Ok();
-        }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
 
+            if (user == null || user.EmailConfirmed)
+            {
+                return BadRequest();
+            }
+            else if ((await _userManager.ConfirmEmailAsync(user, token)).Succeeded)
+            {
+                return Ok("Email confirmation successful");
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

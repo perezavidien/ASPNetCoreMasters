@@ -1,4 +1,4 @@
-﻿using ASPNetCoreMastersTodoList.Api.ApiModels;
+﻿using ASPNetCoreMastersTodoList.Api.BindingModels;
 using ASPNetCoreMastersTodoList.Api.Data;
 using ASPNetCoreMastersTodoList.Api.Filters;
 using Microsoft.AspNetCore.Authorization;

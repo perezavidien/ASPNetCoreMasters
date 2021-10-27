@@ -10,6 +10,8 @@ using ASPNetCoreMastersTodoList.Api.Filters;
 using ASPNetCoreMastersTodoList.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ASPNetCoreMastersTodoList.Api
 {
@@ -33,6 +35,27 @@ namespace ASPNetCoreMastersTodoList.Api
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<DotNetMastersDB>()
                 .AddDefaultTokenProviders();
+
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["jwt:secret"]));
+            services.Configure<JwtOptions>(options =>
+            {
+                options.SecurityKey = securityKey;
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Bearer";
+                options.DefaultChallengeScheme = "Bearer";
+                options.DefaultScheme = "Bearer";
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    IssuerSigningKey = securityKey
+                };
+            });
 
             services.AddControllers(options =>
             {
