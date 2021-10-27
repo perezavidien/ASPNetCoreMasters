@@ -110,19 +110,18 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
-
             if (user == null || user.EmailConfirmed)
             {
                 return BadRequest();
             }
-            else if ((await _userManager.ConfirmEmailAsync(user, token)).Succeeded)
-            {
-                return Ok("Email confirmation successful");
-            }
-            else
+
+            var confirmEmailResult = await _userManager.ConfirmEmailAsync(user, token);
+            if (!confirmEmailResult.Succeeded)
             {
                 return BadRequest();
             }
+
+            return Ok("Email confirmation successful");
         }
     }
 }
