@@ -7,6 +7,11 @@ using Services;
 using Repositories;
 using ASPNetCoreMastersTodoList.Api.Helpers;
 using ASPNetCoreMastersTodoList.Api.Filters;
+using ASPNetCoreMastersTodoList.Api.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ASPNetCoreMastersTodoList.Api
 {
@@ -22,6 +27,36 @@ namespace ASPNetCoreMastersTodoList.Api
         // This method gets called by the runtime. Use this method to add services to the containermap.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DotNetMastersDB>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<DotNetMastersDB>()
+                .AddDefaultTokenProviders();
+
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["jwt:secret"]));
+            services.Configure<JwtOptions>(options =>
+            {
+                options.SecurityKey = securityKey;
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Bearer";
+                options.DefaultChallengeScheme = "Bearer";
+                options.DefaultScheme = "Bearer";
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    IssuerSigningKey = securityKey
+                };
+            });
+
             services.AddControllers(options =>
             {
                 options.Filters.Add(new PerformanceFilter());
@@ -38,7 +73,8 @@ namespace ASPNetCoreMastersTodoList.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            } else
+            }
+            else
             {
                 app.UseExceptionHandler("/error");
             }
@@ -46,6 +82,8 @@ namespace ASPNetCoreMastersTodoList.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -1,38 +1,42 @@
-﻿using ASPNetCoreMastersTodoList.Api.ApiModels;
+﻿using ASPNetCoreMastersTodoList.Api.BindingModels;
+using ASPNetCoreMastersTodoList.Api.Data;
 using ASPNetCoreMastersTodoList.Api.Filters;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services;
 using Services.DTO;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     [ItemExists]
+    [Authorize]
     public class ItemsController : Controller
     {
         private readonly ILogger<ItemsController> _logger;
 
         private IItemService _itemService;
 
-        public ItemsController(ILogger<ItemsController> logger, IItemService itemService)
+        private DotNetMastersDB _dbContext;
+
+        public ItemsController(ILogger<ItemsController> logger, IItemService itemService, DotNetMastersDB dbContext )
         {
             _logger = logger;
             _itemService = itemService;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
         IActionResult Get()
         {
-            var result = _itemService.GetAll();
+            //var result = _itemService.GetAll();
+            //return Ok(result);
 
-            return Ok(result);
+            return Ok(_dbContext.Item.ToList());
         }
 
         [HttpGet]
