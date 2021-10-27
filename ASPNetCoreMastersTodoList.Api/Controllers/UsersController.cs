@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using Microsoft.Extensions.Options;
-using ASPNetCoreMastersTodoList.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using ASPNetCoreMastersTodoList.Api.Data;
 using Microsoft.AspNetCore.Identity;
@@ -23,20 +20,14 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly DotNetMastersDB _dbContext;
-        private IConfiguration _config;
         private JwtOptions _jwtOptions;
         private UserManager<IdentityUser> _userManager;
 
         public UsersController(
-            IConfiguration config,
             IOptions<JwtOptions> JwtOptions,
-            DotNetMastersDB dbContext,
             UserManager<IdentityUser> userManager)
         {
-            _config = config;
             _jwtOptions = JwtOptions.Value;
-            _dbContext = dbContext;
             _userManager = userManager;
 
         }

@@ -2,15 +2,12 @@
 using ASPNetCoreMastersTodoList.Api.Data;
 using ASPNetCoreMastersTodoList.Api.Filters;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services;
 using Services.DTO;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
@@ -36,8 +33,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [HttpGet]
         IActionResult Get()
         {
-            var result = _itemService.GetAll();
-
+            //var result = _itemService.GetAll();
             //return Ok(result);
 
             return Ok(_dbContext.Item.ToList());
