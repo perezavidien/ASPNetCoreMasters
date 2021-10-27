@@ -15,7 +15,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly UserDBContext _dbContext;
+        private readonly DotNetMastersDB _dbContext;
         private IConfiguration _config;
         //private IAuthorizationService _authService;
         private IOptions<Authentication> _authSettings;
@@ -24,7 +24,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             IConfiguration config, 
             IAuthorizationService _authService, 
             IOptions<Authentication> authSettings,
-            UserDBContext dbContext)
+            DotNetMastersDB dbContext)
         {
             _config = config;
             _authSettings = authSettings;

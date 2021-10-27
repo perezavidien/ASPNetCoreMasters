@@ -25,14 +25,10 @@ namespace ASPNetCoreMastersTodoList.Api
         // This method gets called by the runtime. Use this method to add services to the containermap.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<UserDBContext>(options =>
+            services.AddDbContext<DotNetMastersDB>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
-
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<UserDBContext>()
-                .AddDefaultTokenProviders();
 
             services.AddControllers(options =>
             {
