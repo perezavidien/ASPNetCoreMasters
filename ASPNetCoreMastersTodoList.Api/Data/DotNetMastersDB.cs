@@ -13,6 +13,6 @@ namespace ASPNetCoreMastersTodoList.Api.Data
         {
         }
 
-        DbSet<User> User { get; set; }
+        DbSet<Item> Item { get; set; }
     }
 }
