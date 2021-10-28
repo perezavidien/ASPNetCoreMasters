@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ASPNetCoreMastersTodoList.Api.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPNetCoreMastersTodoList.Api
 {
@@ -56,6 +58,13 @@ namespace ASPNetCoreMastersTodoList.Api
                     IssuerSigningKey = securityKey
                 };
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CanEditItems", policy => policy.Requirements.Add(new IsCreatorRequirement()));
+            });
+
+            services.AddScoped<IAuthorizationHandler, IsCreator>();
 
             services.AddControllers(options =>
             {
