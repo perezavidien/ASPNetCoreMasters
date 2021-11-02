@@ -6,25 +6,27 @@ namespace Services.DTO
 {
     public class ItemDTO
     {
-        public string Text { get; set; }
+        public string Title { get; set; }
         public int Id { get; set; }
+        public string ShortDescription { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime DateCreated { get; set; }
 
         public ItemDTO()
         { }
 
-        public ItemDTO(string text)
+        public ItemDTO(string title)
         {
-            if (!String.IsNullOrEmpty(text))
-                Text = text;
+            if (!String.IsNullOrEmpty(title))
+                Title = title;
         }
-        public ItemDTO(int id, string text)
+        public ItemDTO(int id, string title)
         {
             if (id != default)
                 Id = id;
 
-            if (!String.IsNullOrEmpty(text))
-                Text = text;
+            if (!String.IsNullOrEmpty(title))
+                Title = title;
         }
-
     }
 }

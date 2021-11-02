@@ -4,6 +4,9 @@ using ASPNetCoreMastersTodoList.Api.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Services;
 using Services.DTO;
 using System.Collections.Generic;
@@ -17,26 +20,27 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     [Authorize]
     public class ItemsController : Controller
     {
+        private readonly IItemService _itemService;
+        private readonly UserManager<IdentityUser> _userService;
+        private readonly IAuthorizationService _authService;
         private readonly ILogger<ItemsController> _logger;
 
-        private IItemService _itemService;
-
-        private DotNetMastersDB _dbContext;
-
-        public ItemsController(ILogger<ItemsController> logger, IItemService itemService, DotNetMastersDB dbContext )
+        public ItemsController(
+            ILogger<ItemsController> logger,
+            IItemService itemService,
+            UserManager<IdentityUser> userService,
+            IAuthorizationService authService)
         {
             _logger = logger;
             _itemService = itemService;
-            _dbContext = dbContext;
+            _userService = userService;
+            _authService = authService;
         }
 
         [HttpGet]
         IActionResult Get()
         {
-            //var result = _itemService.GetAll();
-            //return Ok(result);
-
-            return Ok(_dbContext.Item.ToList());
+            return Ok(_itemService.GetAll().ToList());
         }
 
         [HttpGet]
@@ -63,22 +67,41 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         }
 
         [HttpPost]
-        IActionResult Post([FromBody] ItemCreateBindingModel itemCreateModel)
+        async Task<IActionResult> Post([FromBody] ItemCreateBindingModel itemCreateModel)
         {
-            var itemDto = new ItemDTO(itemCreateModel.Text);
+            var email = ((ClaimsIdentity)User.Identity).FindFirst("Email");
+            var user = await _userService.FindByNameAsync(email.Value);
 
-            _itemService.Add(itemDto);
+            var itemDto = new ItemDTO()
+            {
+                Title = itemCreateModel.Title,
+                ShortDescription = itemCreateModel.Description
+            };
+
+            _itemService.Add(itemDto, user);
 
             return Ok();
         }
 
         [HttpPut]
         [Route("{itemId}")]
-        IActionResult Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
+        async Task<IActionResult> Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
         {
-            var itemDto = new ItemDTO(itemId, itemUpdateModel.Text);
+            var itemDto = _itemService.Get(itemId);
+            var authorized = await _authService
+                .AuthorizeAsync(User, new ItemDTO() { CreatedBy = itemDto.CreatedBy }, "CanEditItems");
 
-            _itemService.Update(itemDto);
+            if (!authorized.Succeeded)
+            {
+                return new ForbidResult();
+            }
+
+            _itemService.Update(new ItemDTO()
+            {
+                Id = itemUpdateModel.Id,
+                Title = itemUpdateModel.Title,
+                ShortDescription = itemUpdateModel.Description
+            });
 
             return Ok();
         }

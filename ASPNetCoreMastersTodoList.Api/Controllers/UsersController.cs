@@ -62,7 +62,8 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             IList<Claim> userClaims = new List<Claim>
             {
                 new Claim("UserName", user.UserName),
-                new Claim("Email", user.Email)
+                new Claim("Email", user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             return new JwtSecurityTokenHandler().WriteToken(

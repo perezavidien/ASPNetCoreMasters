@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ASPNetCoreMastersTodoList.Api.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPNetCoreMastersTodoList.Api
 {
@@ -27,13 +29,13 @@ namespace ASPNetCoreMastersTodoList.Api
         // This method gets called by the runtime. Use this method to add services to the containermap.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DotNetMastersDB>(options =>
+            services.AddDbContext<DotNetCoreMastersDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<DotNetMastersDB>()
+                .AddEntityFrameworkStores<DotNetCoreMastersDbContext>()
                 .AddDefaultTokenProviders();
 
             var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["jwt:secret"]));
@@ -57,13 +59,20 @@ namespace ASPNetCoreMastersTodoList.Api
                 };
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CanEditItems", policy => policy.Requirements.Add(new IsCreatorRequirement()));
+            });
+
+            services.AddScoped<IAuthorizationHandler, IsCreator>();
+
             services.AddControllers(options =>
             {
                 options.Filters.Add(new PerformanceFilter());
             });
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IItemRepository, ItemRepository>();
-            services.AddSingleton<DataContext>();
+            services.AddSingleton<DotNetCoreMastersDbContext>();
             services.Configure<Authentication>(Configuration.GetSection("Authentication"));
         }
 

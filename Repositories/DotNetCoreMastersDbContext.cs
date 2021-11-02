@@ -1,4 +1,4 @@
-﻿using ASPNetCoreMastersTodoList.Api.Data.Models;
+﻿using DomainModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ASPNetCoreMastersTodoList.Api.Data
 {
-    public class DotNetMastersDB : IdentityDbContext
+    public class DotNetCoreMastersDbContext : IdentityDbContext
     {
-        public DotNetMastersDB(DbContextOptions options) : base(options)
+        public DotNetCoreMastersDbContext(DbContextOptions options) : base(options)
         {
         }
 

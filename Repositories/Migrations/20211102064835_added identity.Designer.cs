@@ -4,14 +4,16 @@ using ASPNetCoreMastersTodoList.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ASPNetCoreMastersTodoList.Api.Migrations
+namespace Repositories.Migrations
 {
-    [DbContext(typeof(DotNetMastersDB))]
-    partial class DotNetMastersDBModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DotNetCoreMastersDbContext))]
+    [Migration("20211102064835_added identity")]
+    partial class addedidentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,12 +21,18 @@ namespace ASPNetCoreMastersTodoList.Api.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ASPNetCoreMastersTodoList.Api.Data.Models.Item", b =>
+            modelBuilder.Entity("DomainModels.Item", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ShortDescriptiton")
                         .HasColumnType("nvarchar(max)");
