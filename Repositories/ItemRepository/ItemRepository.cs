@@ -47,11 +47,14 @@ namespace Repositories
                     {
                         //create
                         _dataContext.Item.Add(item);
+                        _dataContext.SaveChanges();
                     }
                     else
                     {
                         //update
                         record.Title = item.Title;
+                        record.ShortDescription = item.ShortDescription;
+                        _dataContext.SaveChanges();
                     }
                 }
             }

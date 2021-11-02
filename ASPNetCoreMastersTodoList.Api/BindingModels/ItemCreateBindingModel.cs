@@ -10,6 +10,7 @@ namespace ASPNetCoreMastersTodoList.Api.BindingModels
     {
         [Required]
         [StringLength(128, MinimumLength = 1)]
-        public string Text { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
     }
 }

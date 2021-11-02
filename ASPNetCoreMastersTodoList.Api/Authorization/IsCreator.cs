@@ -18,15 +18,19 @@ namespace ASPNetCoreMastersTodoList.Api.Authorization
             _userManager = userManager;
         }
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, IsCreatorRequirement requirement, ItemDTO resource)
+        protected override async Task HandleRequirementAsync(
+            AuthorizationHandlerContext context,
+            IsCreatorRequirement requirement,
+            ItemDTO resource)
         {
             var user = await _userManager.GetUserAsync(context.User);
+
             if (user != null)
             {
                 return;
             }
 
-            if(resource.CreatedBy == user.Id)
+            if (resource.CreatedBy == user.Id)
             {
                 context.Succeed(requirement);
             }

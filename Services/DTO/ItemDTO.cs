@@ -8,6 +8,7 @@ namespace Services.DTO
     {
         public string Title { get; set; }
         public int Id { get; set; }
+        public string ShortDescription { get; set; }
         public string CreatedBy { get; set; }
         public DateTime DateCreated { get; set; }
 
