@@ -11,6 +11,8 @@ using Services;
 using Services.DTO;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using System.Text.Json;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
@@ -40,6 +42,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [HttpGet]
         IActionResult Get()
         {
+            _logger.LogInformation("[Get] - {RequestDatetime}", DateTime.Now);
             return Ok(_itemService.GetAll().ToList());
         }
 
@@ -47,6 +50,7 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("{itemId}")]
         IActionResult Get(int itemId)
         {
+            _logger.LogInformation("[Get] - {RequestDatetime} - {Parameter}", DateTime.Now, itemId);
             var result = _itemService.Get(itemId);
 
             return Ok(result);
@@ -56,6 +60,8 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("filterBy")]
         IActionResult GetByFilters([FromBody] Dictionary<string, string> filters)
         {
+            _logger.LogInformation("[GetByFilters] - {RequestDatetime} - {Parameter}", DateTime.Now, filters);
+
             var id = int.Parse(filters.GetValueOrDefault("id"));
             var text = filters.GetValueOrDefault("text");
 
@@ -69,6 +75,8 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [HttpPost]
         async Task<IActionResult> Post([FromBody] ItemCreateBindingModel itemCreateModel)
         {
+            _logger.LogInformation("[Post] - {RequestDatetime} - {Parameter}", DateTime.Now, itemCreateModel);
+
             var email = ((ClaimsIdentity)User.Identity).FindFirst("Email");
             var user = await _userService.FindByNameAsync(email.Value);
 
@@ -87,6 +95,8 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("{itemId}")]
         async Task<IActionResult> Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
         {
+            _logger.LogInformation("[Put] - {RequestDatetime} - {Parameter}", DateTime.Now, itemUpdateModel);
+
             var itemDto = _itemService.Get(itemId);
             var authorized = await _authService
                 .AuthorizeAsync(User, new ItemDTO() { CreatedBy = itemDto.CreatedBy }, "CanEditItems");
@@ -110,6 +120,8 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Route("{itemId}")]
         IActionResult Delete(int itemId)
         {
+            _logger.LogInformation("[Delete] - {RequestDatetime} - {Parameter}", DateTime.Now, itemId);
+
             _itemService.Delete(itemId);
 
             return Ok();

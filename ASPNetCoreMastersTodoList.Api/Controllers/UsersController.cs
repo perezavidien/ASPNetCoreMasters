@@ -13,6 +13,7 @@ using ASPNetCoreMastersTodoList.Api.BindingModels;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
 
 namespace ASPNetCoreMastersTodoList.Api.Controllers
 {
@@ -22,11 +23,14 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     {
         private JwtOptions _jwtOptions;
         private UserManager<IdentityUser> _userManager;
+        private readonly ILogger<ItemsController> _logger;
 
         public UsersController(
+            ILogger<ItemsController> logger,
             IOptions<JwtOptions> JwtOptions,
             UserManager<IdentityUser> userManager)
         {
+            _logger = logger;
             _jwtOptions = JwtOptions.Value;
             _userManager = userManager;
 
@@ -36,6 +40,8 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Login(LoginBindingModel model)
         {
+            _logger.LogInformation("[Login] - {RequestDatetime}", DateTime.Now);
+
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
