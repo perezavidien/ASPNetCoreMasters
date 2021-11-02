@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ASPNetCoreMastersTodoList.Api.Migrations
+namespace Repositories.Migrations
 {
-    public partial class identityadded : Migration
+    public partial class addedidentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

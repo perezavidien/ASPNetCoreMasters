@@ -19,7 +19,7 @@ namespace Services
         public IEnumerable<ItemDTO> GetAll()
         {
             return _repository.All()
-                .Select(_ => new ItemDTO { Id = _.Id, Text = _.Text });
+                .Select(_ => new ItemDTO { Id = _.Id, Title = _.Title });
         }
         public ItemDTO Get(int itemId)
         {
@@ -31,17 +31,17 @@ namespace Services
                 //    throw;
                 //}
 
-            return new ItemDTO { Id = record.Id, Text = record.Text };
+            return new ItemDTO { Id = record.Id, Title = record.Title };
         }
         public IEnumerable<ItemDTO> GetAllByFilter(ItemByFilterDTO filters)
         {
-            return _repository.All().Where(_ => _.Text == filters.Text)
-                .Select(_ => new ItemDTO { Id = _.Id, Text = _.Text });
+            return _repository.All().Where(_ => _.Title == filters.Text)
+                .Select(_ => new ItemDTO { Id = _.Id, Title = _.Title });
         }
 
         public void Add(ItemDTO itemDto)
         {
-            var record = new Item(itemDto.Text);
+            var record = new Item(itemDto.Title);
             _repository.Save(record);
         }
 

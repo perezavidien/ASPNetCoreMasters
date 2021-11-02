@@ -21,9 +21,9 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         private IItemService _itemService;
 
-        private DotNetMastersDB _dbContext;
+        private DotNetCoreMastersDbContext _dbContext;
 
-        public ItemsController(ILogger<ItemsController> logger, IItemService itemService, DotNetMastersDB dbContext )
+        public ItemsController(ILogger<ItemsController> logger, IItemService itemService, DotNetCoreMastersDbContext dbContext )
         {
             _logger = logger;
             _itemService = itemService;
