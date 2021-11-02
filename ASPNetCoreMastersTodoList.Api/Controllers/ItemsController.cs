@@ -22,16 +22,19 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
     {
         private readonly IItemService _itemService;
         private readonly UserManager<IdentityUser> _userService;
+        private readonly IAuthorizationService _authService;
         private readonly ILogger<ItemsController> _logger;
 
         public ItemsController(
             ILogger<ItemsController> logger,
             IItemService itemService,
-            UserManager<IdentityUser> userService)
+            UserManager<IdentityUser> userService,
+            IAuthorizationService authService)
         {
             _logger = logger;
             _itemService = itemService;
             _userService = userService;
+            _authService = authService;
         }
 
         [HttpGet]
@@ -69,9 +72,10 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
             var email = ((ClaimsIdentity)User.Identity).FindFirst("Email");
             var user = await _userService.FindByNameAsync(email.Value);
 
-            var itemDto = new ItemDTO(){
-                Title = itemCreateModel.Title
-                // description 
+            var itemDto = new ItemDTO()
+            {
+                Title = itemCreateModel.Title,
+                ShortDescription = itemCreateModel.Description
             };
 
             _itemService.Add(itemDto, user);
@@ -81,10 +85,16 @@ namespace ASPNetCoreMastersTodoList.Api.Controllers
 
         [HttpPut]
         [Route("{itemId}")]
-        IActionResult Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
+        async Task<IActionResult> Put(int itemId, [FromBody] ItemUpdateBindingModel itemUpdateModel)
         {
             var itemDto = _itemService.Get(itemId);
-            //var auth = await 
+            var authorized = await _authService
+                .AuthorizeAsync(User, new ItemDTO() { CreatedBy = itemDto.CreatedBy }, "CanEditItems");
+
+            if (!authorized.Succeeded)
+            {
+                return new ForbidResult();
+            }
 
             _itemService.Update(new ItemDTO()
             {
